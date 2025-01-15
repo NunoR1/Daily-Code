@@ -1,8 +1,10 @@
 public class JAVAFizzBuzz {
   public static void main(String args[]) {
+      int w = 1;
       int x = 3;
       int y = 5;
       int z = 15;
+      FizzBuzz(w);
       FizzBuzz(x);
       FizzBuzz(y);
       FizzBuzz(z);
