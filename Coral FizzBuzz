@@ -1,0 +1,11 @@
+integer x
+x = RandomNumber(1, 100)
+
+if x % 15 == 0
+   Put "FizzBuzz" to output
+elseif x % 5 == 0
+   Put "Buzz" to output
+elseif x % 3 == 0
+   Put "Fizz" to output
+else
+   Put "BuzzFizz" to output
