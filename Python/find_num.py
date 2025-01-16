@@ -10,7 +10,8 @@
 
 import random as r
 
-list_size = r.randint(1, 16)
+list_size = r.randint(1, 15)
+
 num_list = []
 
 for i in range(list_size):
@@ -21,11 +22,16 @@ num_list.remove(r.randint(1, len(num_list)))
 print(num_list)
 
 def whatsThatNum(the_list):
+    found_check = False
     for i in range(len(the_list)):
         if (the_list[i] == i + 1):
             continue
         else:
             the_list.insert(i, i + 1)
+            found_check = True
+
+    if found_check != True:
+        the_list.append(len(the_list) + 1)
     
     return the_list
 
