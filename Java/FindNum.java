@@ -4,7 +4,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class FindNum {
     public static void main(String[] args) {
-        generateList();
+        whatsThatNum(generateList());
         
     }
 
@@ -23,9 +23,19 @@ public class FindNum {
         return numList;
     }
 
-    public static void whatsThatNum(Integer theList) {
-        for (Object i : theList) {
-            
+    public static void whatsThatNum(List<Integer> theList) {
+        boolean found = false;
+        for (int i = 1; i < theList.size() + 1; i++) {
+            if (theList.get(i - 1) != i) {
+                theList.add(i - 1, i);
+                found = true;
+            }
         }
+
+        if (!found) {
+            theList.addLast(theList.size() + 1);
+        }
+
+        System.out.println(theList);
     }
 }
