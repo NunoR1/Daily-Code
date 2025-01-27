@@ -11,8 +11,9 @@ public class Stairs {
     }
 
     static void stairBuilder(String m_character, Integer m_steps) {
+        Integer mult = m_character.length();
         for (int i = 1; i < m_steps + 1; i++) {
-            System.out.println(" ".repeat(m_steps - i) + m_character.repeat(i));
+            System.out.println(" ".repeat((m_steps - i) * mult) + m_character.repeat(i));
         }
     }
 }
