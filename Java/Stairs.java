@@ -7,6 +7,7 @@ public class Stairs {
         String character = input.nextLine();
         System.out.println("Input a number: ");
         Integer steps = input.nextInt();
+        input.close();
         stairBuilder(character, steps);
     }
 
