@@ -11,8 +11,10 @@ public class Factorial {
     }
 
     static long Fact(long num) {
-        if (num <= 0) {
-            num = 0;
+        if (num < 0) {
+            return 0;
+        } else if (num == 0) {
+            return 1;
         } else {
             long limit = num;
             for (long i = 1; i != limit; i++) {
