@@ -4,7 +4,7 @@ public class GuessNumber {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         int number = (int)(Math.random() * 100);
-        System.out.print("Guess my number from 0 to 100: ");
+        System.out.print("Guess my magic number from 0 to 100: ");
         int guess = scanner.nextInt();
         System.out.println("\n");
 
