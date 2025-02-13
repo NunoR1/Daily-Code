@@ -18,8 +18,9 @@ public class ArrayWeGo {
         int[] numbers;
         numbers = new int[5];
         
-        System.out.println("[" + numbers[0] + ", " + numbers[1] + ", " + numbers[2] + ", " + numbers[3] + ", " + numbers[4] + "]");
-        System.out.println("");
+        printArray(numbers, 5);
+        // System.out.println("[" + numbers[0] + ", " + numbers[1] + ", " + numbers[2] + ", " + numbers[3] + ", " + numbers[4] + "]");
+        // System.out.println("");
     }
 
     
@@ -36,8 +37,9 @@ public class ArrayWeGo {
         numbers[3] = 11;
         numbers[4] = 2;
         
-        System.out.println("[" + numbers[0] + ", " + numbers[1] + ", " + numbers[2] + ", " + numbers[3] + ", " + numbers[4] + "]");
-        System.out.println("");
+        printArray(numbers, 5);
+        // System.out.println("[" + numbers[0] + ", " + numbers[1] + ", " + numbers[2] + ", " + numbers[3] + ", " + numbers[4] + "]");
+        // System.out.println("");
     }
     
 
@@ -49,8 +51,9 @@ public class ArrayWeGo {
         
         int[] numbers = {21, 12, 22, 11, 2};
         
-        System.out.println("[" + numbers[0] + ", " + numbers[1] + ", " + numbers[2] + ", " + numbers[3] + ", " + numbers[4] + "]");
-        System.out.println("");
+        printArray(numbers, 5);
+        // System.out.println("[" + numbers[0] + ", " + numbers[1] + ", " + numbers[2] + ", " + numbers[3] + ", " + numbers[4] + "]");
+        // System.out.println("");
     }
 
 
@@ -67,8 +70,9 @@ public class ArrayWeGo {
             numbers[i] = numbers[i-1] + 3;
         }
 
-        System.out.println("[" + numbers[0] + ", " + numbers[1] + ", " + numbers[2] + ", " + numbers[3] + ", " + numbers[4] + "]");
-        System.out.println("");
+        printArray(numbers, 5);
+        // System.out.println("[" + numbers[0] + ", " + numbers[1] + ", " + numbers[2] + ", " + numbers[3] + ", " + numbers[4] + "]");
+        // System.out.println("");
     }
     
     public static void forLoopFillArrayCharVer() { // Task 5: Declare an Array and fill the values using a for loop, char edition
@@ -118,7 +122,7 @@ public class ArrayWeGo {
     public static void printArray(int[] list, int length) {
         System.out.print("[");
         for (int i = 0; i < length; i++) { 
-            System.out.print((i != 4) ? list[i] + ", " : list[i]);
+            System.out.print((i != length - 1) ? list[i] + ", " : list[i]);
         }
         System.out.println("]");
     }
