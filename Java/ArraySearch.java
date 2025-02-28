@@ -13,6 +13,8 @@ public class ArraySearch {
             length = scanner.nextInt();
         } while (length <= 0);
         
+        scanner.close();
+
         int[] userArray = new int[length];
 
         // Create an array of the specified size and fill with random numbers
