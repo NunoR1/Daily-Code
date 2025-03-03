@@ -98,13 +98,18 @@ public class Capstone {
         long startTime;
         long stopTime;
         long[] times = new long[searches * 4];
+        int[] resultsList = new int[times.length];
+
         for (int i = 0; i < times.length; i++) {
+            System.out.println("Target " + targetList[1 + (i / searches)] + ": " + targetList[i / 4] + "- Linear Search\nStarting time...");
+            startTime = System.nanoTime();
+            resultsList[i] = linearSearch(targetList[i / searches], numList);
+            stopTime = System.nanoTime();
+            times[i] = stopTime - startTime;
+            i++;
+
 
         }
 
-    }
-
-    public static long[] greatSearch(int[] targets, int[] numbers) {
-        
     }
 }
