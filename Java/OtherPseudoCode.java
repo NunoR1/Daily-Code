@@ -2,8 +2,8 @@ import java.util.Arrays; // they didn't import Arrays in the pseudocode
 import java.util.Scanner;
 
 public class OtherPseudoCode {
+    static Scanner scanner = new Scanner(System.in);
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
         
         System.out.print("Input a number greater or equal to 5: ");
         int input = scanner.nextInt();

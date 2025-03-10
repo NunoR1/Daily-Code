@@ -93,6 +93,7 @@ public class ArrayWeGo {
         System.out.println("");
     }
 
+    static Scanner scanner = new Scanner(System.in);
 
     public static void userDefinedArray() { // Task 6: User-Defined Array with Random Values
         // Prompt the user to enter the size of the array.
@@ -101,7 +102,6 @@ public class ArrayWeGo {
         // Print the array values.
         System.out.println("User-Defined Array with Random Values");
         
-        Scanner scanner = new Scanner(System.in);
 
         System.out.print("Input a number NOW: ");
         int length = scanner.nextInt();

@@ -2,8 +2,8 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class Capstone {
+    static Scanner scanner = new Scanner(System.in);
     public static int valid(int lim, String ask) { // input validation function
-        Scanner scanner = new Scanner(System.in);
         int a;
 
         do {
