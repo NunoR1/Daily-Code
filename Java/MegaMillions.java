@@ -1,247 +1,347 @@
-import java.util.Arrays;
-import java.util.Random;
 import java.util.Scanner;
+import java.util.Random;
+import java.util.Arrays;
 
+/**
+ * MegaMillions Lottery Simulator
+ * This program simulates the Mega Millions lottery game.
+ * Players can buy tickets, select numbers or use Quick Pick,
+ * add the Megaplier option, and win prizes based on matches.
+ */
 public class MegaMillions {
+    // Static variables for game state
     static Scanner scanner = new Scanner(System.in);
     static Random random = new Random();
     static double balance;
     static double totalWinnings = 0;
     static double totalSpent = 0;
 
+    /**
+     * Main method - Entry point of the program
+     * Calls the three primary game methods in sequence
+     */
     public static void main(String[] args) {
         initializeGame();
-        
-        // Run the game loop until the player can no longer play
         runGame();
         printGameSummary();
     }
 
-    // Initialize the game (set balance, print welcome message)
+    /**
+     * Sets the starting balance and prints a welcome message
+     */
     public static void initializeGame() {
-        balance = 50;
-        System.out.println(" _  _  ________      _______ _____ ______________    _______ _____     ______________ _____________    ____________            _____ _____ __   ________  ///\n |  |  ||______|     |      |     ||  |  ||______       |   |     |    |  |  ||______|  ____|_____|    |  |  |  |  |     |       |  |     || \\  ||______ /// \n |__|__||______|_____|_____ |_____||  |  ||______       |   |_____|    |  |  ||______|_____||     |    |  |  |__|__|_____|_______|__|_____||  \\_|______|...  ");
-        System.out.println("=".repeat(156));
+        balance = 50.0;
+        System.out.println("======================================");
+        System.out.println("      WELCOME TO MEGA MILLIONS!      ");
+        System.out.println("======================================");
+        System.out.println("You start with $50.00.\n");
     }
 
-    // Run the game loop (handle multiple rounds of play)
-    // initial input asking to start
-    // while running playRound and asking if they want to keep playing
-    // terminates when balance < 2 or input == no
-    // returns nothing and no parameters
-
+    /**
+     * Runs the game loop, allowing multiple plays until the player stops or runs out of money
+     */
     public static void runGame() {
-        System.out.println("Your current balance: $" + String.format("%.2f", balance * 1.0));
-        System.out.print("Do you wish to start(y/n)?: ");
-        char waiver = Character.toLowerCase(scanner.next().charAt(0));
-        while (balance >= 2 && waiver == 'y') { 
+        while (balance >= 2) {
             playRound();
-            System.out.print("Do you wish to play again?(y/n): ");
-            waiver = Character.toLowerCase(scanner.next().charAt(0));
-        }
-
-        System.out.println();
-        // conditional checking how the player lost different message for each prob through single line
-        System.out.print((waiver == 'n') ? "Spectacular performance\nHere are your winnings" : "TOO BAD\nHAhAHAHAHHAHAHAHAHAHAHHA You lost all your money\nCheck this out");
-    }
-
-    // Play one round (handle number selection, ticket purchase, drawing numbers, checking results, updating balance)
-    // ask for quick pick or not
-    //  if not will ask user for numbers
-    //      before putting it in if getValidNumber
-    public static void playRound() {
-        int number;
-        int megaBall;
-        int[] userNums = new int[5];
-        System.out.println("=".repeat(33));
-        System.out.println();
-        System.out.print("Do you wish to quick pick(y/n): ");
-        char quickPick = Character.toLowerCase(scanner.next().charAt(0));
-        System.out.println();
-
-        if (quickPick == 'y') {
-            userNums = generateNumbers().clone();
-            System.out.println("Your Quick Pick: " + Arrays.toString(userNums));
-            // mega ball code below
-            megaBall = 1 + random.nextInt(25);
-            System.out.println("MegaBall: " + megaBall);
-        } else {
-            for (int i = 0; i < userNums.length; i++) {
-                System.out.print("Input your number " + (i + 1) + "(1-70): ");
-                number = scanner.nextInt();
-                if (getValidNumber(number, 70, userNums)) { // 
-                    userNums[i] = number;
-                } else {i--;}
+            if (balance < 2) {
+                System.out.println("\nYou don't have enough money to play again. Game over!");
+                break;
             }
+            System.out.print("\nDo you want to play again? (yes/no): ");
+            if (!scanner.next().equalsIgnoreCase("yes")) {
+                break;
+            }
+        }
+    }
 
+    /**
+     * Handles number selection, ticket purchase, drawing numbers, checking results, and updating balance
+     */
+    public static void playRound() {
+        // Display current balance
+        displayBalance();
+        
+        // Get player choices
+        boolean quickPick = askQuickPick();
+        
+        // Get player's numbers based on choice
+        int[] userNumbers;
+        if (quickPick) {
+            userNumbers = generateNumbers();
+            System.out.println("Your Quick Pick: " + Arrays.toString(userNumbers) + " Mega Ball: " + 
+                             (quickPick ? getMegaBall(true) : ""));
+        } else {
+            userNumbers = getUserNumbers();
+        }
+        
+        // Get Mega Ball
+        int megaBall = getMegaBall(quickPick);
+        
+        // Ask about Megaplier option
+        boolean megaplierOption = askMegaplier();
+        
+        // Calculate ticket cost
+        double ticketCost = megaplierOption ? 3.0 : 2.0;
+        
+        // Check if player has enough money
+        if (!validateBalance(ticketCost)) {
+            return;
+        }
+        
+        // Update balance after purchase
+        updateBalance(-ticketCost);
+        
+        // Generate winning numbers and Mega Ball
+        int[] winningNumbers = generateNumbers();
+        int winningMegaBall = random.nextInt(25) + 1;
+        
+        // Get Megaplier value if option was selected
+        int megaplier = megaplierOption ? getRandomMegaplier() : 1;
+        
+        // Display winning numbers
+        displayWinningNumbers(winningNumbers, winningMegaBall, megaplierOption, megaplier);
+        
+        // Process results and update balance
+        processResults(userNumbers, megaBall, winningNumbers, winningMegaBall, megaplier);
+    }
+
+    /**
+     * Helper method to display the current balance
+     */
+    public static void displayBalance() {
+        System.out.println("--------------------------------------");
+        System.out.println("Current Balance: $" + String.format("%.2f", balance));
+        System.out.println("--------------------------------------");
+    }
+
+    /**
+     * Asks if the player wants to use Quick Pick
+     * @return true for Quick Pick, false for manual selection
+     */
+    public static boolean askQuickPick() {
+        System.out.print("Do you want Quick Pick? (yes/no): ");
+        return scanner.next().equalsIgnoreCase("yes");
+    }
+
+    /**
+     * Gets the player's manual number selections
+     * @return array of 5 unique numbers between 1-70
+     */
+    public static int[] getUserNumbers() {
+        int[] userNumbers = new int[5];
+        System.out.println("Enter five unique numbers (1-70): ");
+        for (int i = 0; i < 5; i++) {
+            int userInput;
             do {
-                System.out.print("Pick your MegaBall number(1-25): ");
-                megaBall = scanner.nextInt();
-            } while (1 >= megaBall || megaBall >= 25);
-
-            System.out.println();
-            System.out.println("Your Numbers: " + Arrays.toString(userNums));
-            System.out.println("Your MegaBall: " + megaBall);
+                userInput = getValidNumber(1, 70);
+                if (contains(Arrays.copyOfRange(userNumbers, 0, i), userInput)) {
+                    System.out.println("Duplicate number! Enter a different number:");
+                }
+            } while (contains(Arrays.copyOfRange(userNumbers, 0, i), userInput));
+            userNumbers[i] = userInput;
         }
-
-        System.out.println();
-        
-        // megaplier
-        System.out.print("Do you wish to buy a Megaplier for $1(y/n): ");
-        int megaplier = ('y' == Character.toLowerCase(scanner.next().charAt(0))) ? getRandomMegaplier() : 1;
-        
-        System.out.println();
-        // winning and losing code
-
-        int winnings = getPrize(megaplier, megaBall, userNums);
-        System.out.println(((winnings == 0) ? "HAHAHAHAHHAHAHA ": (winnings == 100000000) ? "JACKPOT " : "") + "You won: $" + String.format("%,3.2f", winnings * 1.0));
-        updateBalance(megaplier > 1, winnings);
-        System.out.println("New Balance: $" + String.format("%,3.2f", balance * 1.0));
-
-        System.out.println("=".repeat(33));
+        return userNumbers;
     }
 
-
-
-    // Update balance after ticket purchase and winnings
-    // auto balance -= 2
-    // if megaplier == true balance -= 1
-    // parameters (bool megaplier, int prize)
-    // return int showing profit
-    // updates totalSpent and totalWinnings and balance
-    public static void updateBalance(boolean megaplier, int prize) {
-        balance -= 2;
-        totalSpent += 2;
-        if (megaplier) {
-            balance--;
-            totalSpent++;
+    /**
+     * Gets the Mega Ball number
+     * @param quickPick if true, generates random Mega Ball
+     * @return Mega Ball number between 1-25
+     */
+    public static int getMegaBall(boolean quickPick) {
+        if (quickPick) {
+            return random.nextInt(25) + 1;
         }
-
-        balance += prize;
-        totalWinnings += prize;
+        System.out.print("Enter your Mega Ball (1-25): ");
+        return getValidNumber(1, 25);
     }
 
+    /**
+     * Asks if the player wants to add the Megaplier option
+     * @return true if Megaplier is added, false otherwise
+     */
+    public static boolean askMegaplier() {
+        System.out.print("Do you want to add Megaplier for $1? (yes/no): ");
+        return scanner.next().equalsIgnoreCase("yes");
+    }
 
-    // Print game summary (total spent, total winnings, final balance)
+    /**
+     * Validates if the player has enough money for the ticket
+     * @param ticketCost cost of the ticket
+     * @return true if balance is sufficient, false otherwise
+     */
+    public static boolean validateBalance(double ticketCost) {
+        if (balance < ticketCost) {
+            System.out.println("\nYou don't have enough money for this play. Game over!");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Displays the winning numbers, Mega Ball, and Megaplier if applicable
+     */
+    public static void displayWinningNumbers(int[] winningNumbers, int winningMegaBall, boolean megaplierOption, int megaplier) {
+        System.out.println("\n======================================");
+        System.out.println("         WINNING NUMBERS: ");
+        System.out.println("======================================");
+        System.out.println(Arrays.toString(winningNumbers) + " Mega Ball: " + winningMegaBall);
+        if (megaplierOption) {
+            System.out.println("Megaplier Drawn: x" + megaplier);
+        }
+        System.out.println("======================================");
+    }
+
+    /**
+     * Processes the results, calculates prizes, and updates the balance
+     */
+    public static void processResults(int[] userNumbers, int megaBall, int[] winningNumbers, int winningMegaBall, int megaplier) {
+        // Count matching numbers
+        int matchCount = countMatches(userNumbers, winningNumbers);
+        boolean megaBallMatch = (megaBall == winningMegaBall);
+        
+        // Calculate prize
+        int basePrize = getPrize(matchCount, megaBallMatch);
+        
+        // Apply Megaplier (except for jackpot)
+        int finalPrize = (matchCount == 5 && megaBallMatch) ? basePrize : basePrize * megaplier;
+
+        // Update balance with winnings
+        updateBalance(finalPrize);
+        
+        // Display results
+        System.out.println("\nYou won: $" + finalPrize);
+        System.out.println("New Balance: $" + String.format("%.2f", balance));
+    }
+
+    /**
+     * Updates the balance after ticket purchase and winnings
+     * @param amount amount to add to balance (negative for spending)
+     */
+    public static void updateBalance(double amount) {
+        balance += amount;
+        if (amount < 0) {
+            totalSpent -= amount;
+        } else {
+            totalWinnings += amount;
+        }
+    }
+
+    /**
+     * Displays the total spent, total winnings, and final balance
+     */
     public static void printGameSummary() {
-        System.out.println();
-        System.out.println("=".repeat(33));
-        System.out.println("SUMMARY");
-        System.out.println("=".repeat(33));
-        System.out.println("Total Spent: $" + String.format("%,3.2f", totalSpent * 1.0));
-        System.out.println("Total Won: $" + String.format("%,3.2f", totalWinnings * 1.0));
-        System.out.println("Final Balance: $" + String.format("%,3.2f", balance * 1.0));
-        System.out.println("=".repeat(33));
+        System.out.println("\n======================================");
+        System.out.println("              GAME OVER");
+        System.out.println("======================================");
+        System.out.println("Total Spent: $" + String.format("%.2f", totalSpent));
+        System.out.println("Total Winnings: $" + String.format("%.2f", totalWinnings));
+        System.out.println("Final Balance: $" + String.format("%.2f", balance));
+        System.out.println("======================================");
     }
 
-
-    // Generate an array of 5 unique random numbers (1-70)
-    // used for quick pick and winning numbers
-    // sort at the end
-    // getValidNumber
+    /**
+     * Generates and returns five unique random numbers between 1-70
+     * @return array of 5 sorted random numbers
+     */
     public static int[] generateNumbers() {
-        int[] array = new int[5];
-        int number;
-        for (int i = 0; i < array.length; i++) {
-            number = 1 + random.nextInt(70);
-            if (getValidNumber(number, 70, array)) { // 
-                array[i] = number;
-            } else {i--;}
+        int[] numbers = new int[5];
+        for (int i = 0; i < 5; i++) {
+            int num;
+            do {
+                num = random.nextInt(70) + 1;
+            } while (contains(Arrays.copyOfRange(numbers, 0, i), num));
+            numbers[i] = num;
         }
-        return array;
+        Arrays.sort(numbers);
+        return numbers;
     }
 
-
-    // Get a valid number input from the user within a given range
-    // parameters is num and upper range because lower range will always be 1
-    // return bool
-    // also checks if number is already in the array
-    public static boolean getValidNumber(int num, int upper, int...array) {
-        return (1 <= num && num <= upper) && !contains(num, array);
+    /**
+     * Ensures the user enters a valid number within a given range
+     * @param min minimum valid value
+     * @param max maximum valid value
+     * @return valid number within range
+     */
+    public static int getValidNumber(int min, int max) {
+        int num;
+        do {
+            while (!scanner.hasNextInt()) {
+                System.out.print("Invalid input. Enter a number between " + min + " and " + max + ": ");
+                scanner.next();
+            }
+            num = scanner.nextInt();
+            if (num < min || num > max) {
+                System.out.print("Number must be between " + min + " and " + max + ": ");
+            }
+        } while (num < min || num > max);
+        return num;
     }
 
-
-    // Check if an array contains a specific number
-    // called in countMatches
-    // checks if current win number is in user array
-    // returns bool
-    public static boolean contains(int curNum, int...array) {
-        for (int i = 0; i < array.length; i++) {
-            if (array[i] == curNum) return true;
+    /**
+     * Checks if a number exists in an array
+     * @param array array to check
+     * @param num number to find
+     * @return true if number is found, false otherwise
+     */
+    public static boolean contains(int[] array, int num) {
+        for (int n : array) {
+            if (n == num) return true;
         }
         return false;
     }
 
-
-    // Count matching numbers between user and winning numbers
-    // parameters is arrays
-    // return int[] so actual matches and megaBall are separate
-    // contains callen within arguments ()
-    // for looping through winning array and user array
-    public static int[] countMatches(int megaBall, int realmegaBall, int[] userArray, int[] winArray) {
+    /**
+     * Counts how many numbers match between the user's ticket and the winning numbers
+     * @param user player's numbers
+     * @param winning winning numbers
+     * @return count of matching numbers
+     */
+    public static int countMatches(int[] user, int[] winning) {
         int count = 0;
-        int wonMegaBall = ((megaBall == realmegaBall) ? 1 : 0);
-        int[] matches = new int[2];
-        for (int curNum : userArray) {
-            if (contains(curNum, winArray)) {
-                count++;
-            }
+        for (int num : user) {
+            if (contains(winning, num)) count++;
         }
-
-        matches[0] = count;
-        matches[1] = wonMegaBall;
-
-        return matches;
+        return count;
     }
 
-
-    // Determine the prize amount based on matches
-    // parameters (int megaplier, int megaball, int[] userNums)
-    // returns prize money int
-    // countMatches is called here
-    public static int getPrize(int megaplier, int megaBall, int...userNums) {
-        int prizeMoney = 0;
-        boolean JACKPOT = false;
-        // generate winning values
-        int[] winNums = generateNumbers();
-        int winMegaBall = 1 + random.nextInt(25);
-        
-        System.out.println("=".repeat(33) + "\n         WINNING NUMBERS         \n" + "=".repeat(33));
-        System.out.print(Arrays.toString(winNums) + " ");
-        System.out.println("MegaBall: " + winMegaBall);
-        System.out.println((megaplier > 1) ? "Megaplier: X" + megaplier : "");
-         System.out.println("=".repeat(33));
-        
-        int matches = countMatches(megaBall, winMegaBall, userNums, winNums)[0];
-        boolean megaBallCheck = countMatches(megaBall, winMegaBall, userNums, winNums)[1] == 1;
-        
-
-        // THE FLOWCHART
-        switch (matches) {
-            case 5 -> {
-                prizeMoney += (megaBallCheck) ? 100000000: 1000000;
-            } case 4 -> {
-                prizeMoney += (megaBallCheck) ? 10000: 500;
-            } case 3 -> {
-                prizeMoney += (megaBallCheck) ? 200: 10;
-            } case 2 -> {
-                prizeMoney += (megaBallCheck) ? 10: 0;
-            } case 1 -> {
-                prizeMoney += (megaBallCheck) ? 4: 0;
-            } case 0 -> {
-                prizeMoney += (megaBallCheck) ? 2: 0;
-            }
-        }
-
-        prizeMoney = (JACKPOT) ? prizeMoney : prizeMoney * megaplier;
-        
-        return prizeMoney;
+    /**
+     * Determines and returns the prize amount based on the number of matches
+     * Prize Distribution:
+     * 5 matches + Mega Ball = $100,000,000 (Jackpot)
+     * 5 matches = $1,000,000
+     * 4 matches + Mega Ball = $10,000
+     * 4 matches = $500
+     * 3 matches + Mega Ball = $200
+     * 3 matches = $10
+     * 2 matches + Mega Ball = $10
+     * 1 match + Mega Ball = $4
+     * 0 matches + Mega Ball = $2
+     * 0-5 matches without Mega Ball = $0
+     * 
+     * @param matchCount number of matching regular numbers
+     * @param megaBallMatch whether Mega Ball matches
+     * @return prize amount
+     */
+    public static int getPrize(int matchCount, boolean megaBallMatch) {
+        if (matchCount == 5 && megaBallMatch) return 100000000;
+        if (matchCount == 5) return 1000000;
+        if (matchCount == 4 && megaBallMatch) return 10000;
+        if (matchCount == 4) return 500;
+        if (matchCount == 3 && megaBallMatch) return 200;
+        if (matchCount == 3) return 10;
+        if (matchCount == 2 && megaBallMatch) return 10;
+        if (matchCount == 1 && megaBallMatch) return 4;
+        if (megaBallMatch) return 2;
+        return 0;
     }
 
-    
-    // Get a random Megaplier value (2x, 3x, 4x, or 5x)
-    // get random number and return that
+    /**
+     * Randomly selects and returns a Megaplier value (2x, 3x, 4x, or 5x)
+     * @return random Megaplier value
+     */
     public static int getRandomMegaplier() {
-        return 2 + random.nextInt(4); 
+        int[] multipliers = {2, 3, 4, 5};
+        return multipliers[random.nextInt(multipliers.length)];
     }
 }
