@@ -1,0 +1,168 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "AllInOne",
+            "request": "launch",
+            "mainClass": "AllInOne",
+            "projectName": "Daily-Code_9666deca"
+        },
+        {
+            "type": "java",
+            "name": "ArraySearch",
+            "request": "launch",
+            "mainClass": "ArraySearch",
+            "projectName": "Daily-Code_9666deca"
+        },
+        {
+            "type": "java",
+            "name": "ArrayWeGo",
+            "request": "launch",
+            "mainClass": "ArrayWeGo",
+            "projectName": "Daily-Code_9666deca"
+        },
+        {
+            "type": "java",
+            "name": "Capstone",
+            "request": "launch",
+            "mainClass": "Capstone",
+            "projectName": "Daily-Code_9666deca"
+        },
+        {
+            "type": "java",
+            "name": "CoffeeShop",
+            "request": "launch",
+            "mainClass": "CoffeOrderTaker.src.CoffeeShop",
+            "projectName": "Daily-Code_9666deca"
+        },
+        {
+            "type": "java",
+            "name": "Cool",
+            "request": "launch",
+            "mainClass": "Cool",
+            "projectName": "Daily-Code_9666deca"
+        },
+        {
+            "type": "java",
+            "name": "Countdown",
+            "request": "launch",
+            "mainClass": "Countdown",
+            "projectName": "Daily-Code_9666deca"
+        },
+        {
+            "type": "java",
+            "name": "DOIT",
+            "request": "launch",
+            "mainClass": "DOIT",
+            "projectName": "Daily-Code_9666deca"
+        },
+        {
+            "type": "java",
+            "name": "Factorial",
+            "request": "launch",
+            "mainClass": "Factorial",
+            "projectName": "Daily-Code_9666deca"
+        },
+        {
+            "type": "java",
+            "name": "FindNum",
+            "request": "launch",
+            "mainClass": "FindNum",
+            "projectName": "Daily-Code_9666deca"
+        },
+        {
+            "type": "java",
+            "name": "GuessNumber",
+            "request": "launch",
+            "mainClass": "GuessNumber",
+            "projectName": "Daily-Code_9666deca"
+        },
+        {
+            "type": "java",
+            "name": "ILoveLambdas",
+            "request": "launch",
+            "mainClass": "ILoveLambdas",
+            "projectName": "Daily-Code_9666deca"
+        },
+        {
+            "type": "java",
+            "name": "JAVAFizzBuzz",
+            "request": "launch",
+            "mainClass": "JAVAFizzBuzz",
+            "projectName": "Daily-Code_9666deca"
+        },
+        {
+            "type": "java",
+            "name": "JavaQuickMaths",
+            "request": "launch",
+            "mainClass": "JavaQuickMaths",
+            "projectName": "Daily-Code_9666deca"
+        },
+        {
+            "type": "java",
+            "name": "MegaMillions",
+            "request": "launch",
+            "mainClass": "MegaMillions",
+            "projectName": "Daily-Code_9666deca"
+        },
+        {
+            "type": "java",
+            "name": "MegaMillionsMine",
+            "request": "launch",
+            "mainClass": "MegaMillionsMine",
+            "projectName": "Daily-Code_9666deca"
+        },
+        {
+            "type": "java",
+            "name": "OtherPseudoCode",
+            "request": "launch",
+            "mainClass": "OtherPseudoCode",
+            "projectName": "Daily-Code_9666deca"
+        },
+        {
+            "type": "java",
+            "name": "Stairs",
+            "request": "launch",
+            "mainClass": "Stairs",
+            "projectName": "Daily-Code_9666deca"
+        },
+        {
+            "type": "java",
+            "name": "Sum",
+            "request": "launch",
+            "mainClass": "Sum",
+            "projectName": "Daily-Code_9666deca"
+        },
+        {
+            "type": "java",
+            "name": "TestWorld",
+            "request": "launch",
+            "mainClass": "TestWorld",
+            "projectName": "Daily-Code_9666deca"
+        },
+        {
+            "type": "java",
+            "name": "Threes",
+            "request": "launch",
+            "mainClass": "Threes",
+            "projectName": "Daily-Code_9666deca"
+        },
+        {
+            "type": "java",
+            "name": "UniqueInTen",
+            "request": "launch",
+            "mainClass": "UniqueInTen",
+            "projectName": "Daily-Code_9666deca"
+        }
+    ]
+}
